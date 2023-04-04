@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>A Brief Introduction to Bayesian Inference</title>
+  <meta name="description" content="A brief introduction to Bayesian concepts, based on a beer-tasting experiment." />
+  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="A Brief Introduction to Bayesian Inference" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="A brief introduction to Bayesian concepts, based on a beer-tasting experiment." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="A Brief Introduction to Bayesian Inference" />
+  
+  <meta name="twitter:description" content="A brief introduction to Bayesian concepts, based on a beer-tasting experiment." />
+  
+
+<meta name="author" content="Johnny van Doorn" />
+
+
+<meta name="date" content="2023-02-14" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+<link rel="next" href="the-lady-tasting-tea.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Bayesian Introduction</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="the-lady-tasting-tea.html"><a href="the-lady-tasting-tea.html"><i class="fa fa-check"></i><b>1</b> The Lady Tasting Tea</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="the-lady-tasting-tea.html"><a href="the-lady-tasting-tea.html#a-bayesian-version"><i class="fa fa-check"></i><b>1.1</b> A Bayesian Version</a></li>
+<li class="chapter" data-level="1.2" data-path="the-lady-tasting-tea.html"><a href="the-lady-tasting-tea.html#an-alcoholic-version"><i class="fa fa-check"></i><b>1.2</b> An Alcoholic Version</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="what-is-a-model.html"><a href="what-is-a-model.html"><i class="fa fa-check"></i><b>2</b> What is a Model?</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="what-is-a-model.html"><a href="what-is-a-model.html#models-make-predictions"><i class="fa fa-check"></i><b>2.1</b> Models Make Predictions</a></li>
+<li class="chapter" data-level="2.2" data-path="what-is-a-model.html"><a href="what-is-a-model.html#model-comparison-section"><i class="fa fa-check"></i><b>2.2</b> Model Comparison</a></li>
+<li class="chapter" data-level="2.3" data-path="what-is-a-model.html"><a href="what-is-a-model.html#more-models-section"><i class="fa fa-check"></i><b>2.3</b> More Models</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="what-is-a-model.html"><a href="what-is-a-model.html#open-minded-model-section"><i class="fa fa-check"></i><b>2.3.1</b> The Open-Minded Model</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="what-is-a-model.html"><a href="what-is-a-model.html#more-model-comparison-section"><i class="fa fa-check"></i><b>2.4</b> More Model Comparisons</a></li>
+<li class="chapter" data-level="2.5" data-path="what-is-a-model.html"><a href="what-is-a-model.html#concluding-thoughts"><i class="fa fa-check"></i><b>2.5</b> Concluding Thoughts</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="model-estimation-section.html"><a href="model-estimation-section.html"><i class="fa fa-check"></i><b>3</b> How do Models Estimate?</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="model-estimation-section.html"><a href="model-estimation-section.html#models-have-beliefs"><i class="fa fa-check"></i><b>3.1</b> Models Have Beliefs</a></li>
+<li class="chapter" data-level="3.2" data-path="model-estimation-section.html"><a href="model-estimation-section.html#updating-beliefs"><i class="fa fa-check"></i><b>3.2</b> Updating Beliefs</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="model-estimation-section.html"><a href="model-estimation-section.html#the-likelihood"><i class="fa fa-check"></i><b>3.2.1</b> The Likelihood</a></li>
+<li class="chapter" data-level="3.2.2" data-path="model-estimation-section.html"><a href="model-estimation-section.html#the-marginal-likelihood"><i class="fa fa-check"></i><b>3.2.2</b> The Marginal Likelihood</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="model-estimation-section.html"><a href="model-estimation-section.html#updated-beliefs"><i class="fa fa-check"></i><b>3.3</b> Updated Beliefs</a></li>
+<li class="chapter" data-level="3.4" data-path="model-estimation-section.html"><a href="model-estimation-section.html#more-models"><i class="fa fa-check"></i><b>3.4</b> More Models</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="model-estimation-section.html"><a href="model-estimation-section.html#sarahs-learning-process"><i class="fa fa-check"></i><b>3.4.1</b> Sarah’s Learning Process</a></li>
+<li class="chapter" data-level="3.4.2" data-path="model-estimation-section.html"><a href="model-estimation-section.html#davids-learning-process"><i class="fa fa-check"></i><b>3.4.2</b> David’s Learning Process</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="model-estimation-section.html"><a href="model-estimation-section.html#prior-distribution-in-bayesian-parameter-estimation"><i class="fa fa-check"></i><b>3.5</b> Prior Distribution in Bayesian Parameter Estimation</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="model-estimation-section.html"><a href="model-estimation-section.html#the-beta-distribution"><i class="fa fa-check"></i><b>3.5.1</b> The Beta Distribution</a></li>
+<li class="chapter" data-level="3.5.2" data-path="model-estimation-section.html"><a href="model-estimation-section.html#beta-interpretation-updating-section"><i class="fa fa-check"></i><b>3.5.2</b> Beta Interpretation</a></li>
+<li class="chapter" data-level="3.5.3" data-path="model-estimation-section.html"><a href="model-estimation-section.html#two-sided-vs-one-sided-estimation"><i class="fa fa-check"></i><b>3.5.3</b> Two-sided vs One-sided Estimation</a></li>
+<li class="chapter" data-level="3.5.4" data-path="model-estimation-section.html"><a href="model-estimation-section.html#an-endless-loop"><i class="fa fa-check"></i><b>3.5.4</b> An Endless Loop</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="model-estimation-section.html"><a href="model-estimation-section.html#relation-to-hypothesis-testing"><i class="fa fa-check"></i><b>3.6</b> Relation to Hypothesis Testing</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="model-estimation-section.html"><a href="model-estimation-section.html#the-savage-dickey-density-ratio"><i class="fa fa-check"></i><b>3.6.1</b> The Savage-Dickey Density Ratio</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="model-estimation-section.html"><a href="model-estimation-section.html#concluding-thoughts-1"><i class="fa fa-check"></i><b>3.7</b> Concluding Thoughts</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="the-beer-tasting.html"><a href="the-beer-tasting.html"><i class="fa fa-check"></i><b>4</b> The Beer Tasting</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="the-beer-tasting.html"><a href="the-beer-tasting.html#methods"><i class="fa fa-check"></i><b>4.1</b> Methods</a></li>
+<li class="chapter" data-level="4.2" data-path="the-beer-tasting.html"><a href="the-beer-tasting.html#analysis-in-jasp"><i class="fa fa-check"></i><b>4.2</b> Analysis in JASP</a></li>
+<li class="chapter" data-level="4.3" data-path="the-beer-tasting.html"><a href="the-beer-tasting.html#continuous-updating"><i class="fa fa-check"></i><b>4.3</b> Continuous Updating</a></li>
+<li class="chapter" data-level="4.4" data-path="the-beer-tasting.html"><a href="the-beer-tasting.html#concluding-thoughts-2"><i class="fa fa-check"></i><b>4.4</b> Concluding Thoughts</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html"><i class="fa fa-check"></i><b>5</b> More Bayesian Analyses</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#the-bayesian-t-test"><i class="fa fa-check"></i><b>5.1</b> The Bayesian T-Test</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#prior-distribution"><i class="fa fa-check"></i><b>5.1.1</b> Prior Distribution</a></li>
+<li class="chapter" data-level="5.1.2" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#predictive-updating-factor"><i class="fa fa-check"></i><b>5.1.2</b> Predictive Updating Factor</a></li>
+<li class="chapter" data-level="5.1.3" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#posterior-distribution-bayes-factor"><i class="fa fa-check"></i><b>5.1.3</b> Posterior Distribution &amp; Bayes Factor</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#the-bayesian-correlation"><i class="fa fa-check"></i><b>5.2</b> The Bayesian Correlation</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#prior-distribution-1"><i class="fa fa-check"></i><b>5.2.1</b> Prior Distribution</a></li>
+<li class="chapter" data-level="5.2.2" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#predictive-updating-factor-1"><i class="fa fa-check"></i><b>5.2.2</b> Predictive Updating Factor</a></li>
+<li class="chapter" data-level="5.2.3" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#posterior-distribution-bayes-factor-1"><i class="fa fa-check"></i><b>5.2.3</b> Posterior Distribution &amp; Bayes Factor</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#concluding-thoughts-3"><i class="fa fa-check"></i><b>5.3</b> Concluding Thoughts</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="exercises.html"><a href="exercises.html"><i class="fa fa-check"></i><b>6</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="exercises.html"><a href="exercises.html#binomial-test"><i class="fa fa-check"></i><b>6.1</b> Binomial Test</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="exercises.html"><a href="exercises.html#therapeutic-touch"><i class="fa fa-check"></i><b>6.1.1</b> Therapeutic Touch</a></li>
+<li class="chapter" data-level="6.1.2" data-path="exercises.html"><a href="exercises.html#psychologists-tasting-beer"><i class="fa fa-check"></i><b>6.1.2</b> Psychologists Tasting Beer</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="exercises.html"><a href="exercises.html#correlation"><i class="fa fa-check"></i><b>6.2</b> Correlation</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="exercises.html"><a href="exercises.html#correlation-a.w.e.s.o.m.-o-4000"><i class="fa fa-check"></i><b>6.2.1</b> Correlation: A.W.E.S.O.M.-O 4000</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="exercises.html"><a href="exercises.html#t-test"><i class="fa fa-check"></i><b>6.3</b> T-Test</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="exercises.html"><a href="exercises.html#the-effect-of-directed-reading-exercises"><i class="fa fa-check"></i><b>6.3.1</b> The Effect of Directed Reading Exercises</a></li>
+<li class="chapter" data-level="6.3.2" data-path="exercises.html"><a href="exercises.html#psychologists-tasting-beer-2-t-test-boogaloo"><i class="fa fa-check"></i><b>6.3.2</b> Psychologists Tasting Beer 2: T-Test Boogaloo</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="exercises.html"><a href="exercises.html#summary-stats"><i class="fa fa-check"></i><b>6.4</b> Summary Stats</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="exercises.html"><a href="exercises.html#t-test-flag-priming"><i class="fa fa-check"></i><b>6.4.1</b> T-Test: Flag Priming</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Brief Introduction to Bayesian Inference</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">A Brief Introduction to Bayesian Inference</h1>
+<h2 class="subtitle"><em>From Tea to Beer</em></h2>
+<p class="author"><em>Johnny van Doorn</em></p>
+<p class="date"><em>2023-02-14</em></p>
+</div>
+<div id="preface" class="section level1 unnumbered hasAnchor">
+<h1>Preface<a href="index.html#preface" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p><strong>This book is still a work in progress</strong></p>
+<p><em>If you encounter any errors/issues, you can reach me <a href="mailto:j.b.vandoorn@uva.nl">here.</a></em></p>
+<p>This booklet offers an introduction to Bayesian inference. We look at how different models make different claims about a parameter, how they learn from observed data, and how we can compare these models to each other. We illustrate these ideas through an informal beer-tasting experiment conducted at the University of Amsterdam.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
+A key concept in Bayesian inference is <em>predictive quality</em>: how well did a model, or parameter value, predict the observed data? We use this predictive quality to update our knowledge about the world, and then use the updated knowledge to make predictions about tomorrow’s world. This learning cycle is visualized below, and will be revisited throughout the booklet.</p>
+<p>In the first chapters, the basic Bayesian ingredients (models, prior, posterior, Bayes factor) will be disucssed. In the chapters that follow, these ingredients are used to cook up results for the beer-tasting experiment. Specifically, the Bayesian binomial test, correlation test, and <span class="math inline">\(t\)</span>-test will be demonstrated.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bayesian-learning-cycle"></span>
+<img src="Figures/BayesianLearningCycle.jpg" alt="Bayesian learning cycle. " width="100%" />
+<p class="caption">
+Figure 0.1: Bayesian learning cycle.
+</p>
+</div>
+
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-vanDoorn2020class" class="csl-entry">
+Doorn, Johnny van, Dora Matzke, and Eric-Jan Wagenmakers. 2020. <span>“An in-Class Demonstration of Bayesian Inference.”</span> <em>Psychology Learning &amp; Teaching</em> 19: 36–45.
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>In fact, this text is an elaborated version of an article we published on the experiment, see <a href="https://journals.sagepub.com/doi/full/10.1177/1475725719848574">van <span class="citation">Doorn, Matzke, and Wagenmakers (<a href="#ref-vanDoorn2020class" role="doc-biblioref">2020</a>)</span></a><a href="index.html#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="the-lady-tasting-tea.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/index.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

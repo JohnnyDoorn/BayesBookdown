@@ -1,0 +1,44 @@
+\contentsline {chapter}{Preface}{5}{chapter*.2}%
+\contentsline {chapter}{\numberline {1}The Lady Tasting Tea}{7}{chapter.1}%
+\contentsline {section}{\numberline {1.1}A Bayesian Version}{8}{section.1.1}%
+\contentsline {section}{\numberline {1.2}An Alcoholic Version}{9}{section.1.2}%
+\contentsline {chapter}{\numberline {2}What is a Model?}{11}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Models Make Predictions}{11}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Model Comparison}{13}{section.2.2}%
+\contentsline {section}{\numberline {2.3}More Models}{14}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}The Open-Minded Model}{16}{subsection.2.3.1}%
+\contentsline {section}{\numberline {2.4}More Model Comparisons}{17}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Concluding Thoughts}{18}{section.2.5}%
+\contentsline {chapter}{\numberline {3}How do Models Estimate?}{21}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Models Have Beliefs}{22}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Updating Beliefs}{23}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}The Likelihood}{23}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}The Marginal Likelihood}{24}{subsection.3.2.2}%
+\contentsline {section}{\numberline {3.3}Updated Beliefs}{26}{section.3.3}%
+\contentsline {section}{\numberline {3.4}More Models}{27}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Sarah's Learning Process}{27}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}David's Learning Process}{29}{subsection.3.4.2}%
+\contentsline {section}{\numberline {3.5}Prior Distribution in Bayesian Parameter Estimation}{31}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}The Beta Distribution}{31}{subsection.3.5.1}%
+\contentsline {subsection}{\numberline {3.5.2}Beta Interpretation}{32}{subsection.3.5.2}%
+\contentsline {subsection}{\numberline {3.5.3}Two-sided vs One-sided Estimation}{33}{subsection.3.5.3}%
+\contentsline {subsection}{\numberline {3.5.4}An Endless Loop}{34}{subsection.3.5.4}%
+\contentsline {section}{\numberline {3.6}Relation to Hypothesis Testing}{34}{section.3.6}%
+\contentsline {subsection}{\numberline {3.6.1}The Savage-Dickey Density Ratio}{34}{subsection.3.6.1}%
+\contentsline {section}{\numberline {3.7}Concluding Thoughts}{36}{section.3.7}%
+\contentsline {chapter}{\numberline {4}The Beer Tasting}{37}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Methods}{38}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Analysis in JASP}{39}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Continuous Updating}{42}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Concluding Thoughts}{45}{section.4.4}%
+\contentsline {chapter}{\numberline {5}More Bayesian Analyses}{47}{chapter.5}%
+\contentsline {section}{\numberline {5.1}The Bayesian T-Test}{47}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Prior Distribution}{47}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Likelihood}{47}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.3}Posterior Distribution}{47}{subsection.5.1.3}%
+\contentsline {subsection}{\numberline {5.1.4}Bayes Factor}{47}{subsection.5.1.4}%
+\contentsline {section}{\numberline {5.2}The Bayesian Correlation}{47}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Prior Distribution}{47}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Likelihood}{47}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}Posterior Distribution}{47}{subsection.5.2.3}%
+\contentsline {subsection}{\numberline {5.2.4}Bayes Factor}{47}{subsection.5.2.4}%

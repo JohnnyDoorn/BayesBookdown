@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 The Beer Tasting | A Brief Introduction to Bayesian Inference</title>
+  <meta name="description" content="A brief introduction to Bayesian concepts, based on a beer-tasting experiment." />
+  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 The Beer Tasting | A Brief Introduction to Bayesian Inference" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="A brief introduction to Bayesian concepts, based on a beer-tasting experiment." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 The Beer Tasting | A Brief Introduction to Bayesian Inference" />
+  
+  <meta name="twitter:description" content="A brief introduction to Bayesian concepts, based on a beer-tasting experiment." />
+  
+
+<meta name="author" content="Johnny van Doorn" />
+
+
+<meta name="date" content="2023-02-14" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="model-estimation-section.html"/>
+<link rel="next" href="more-bayesian-analyses.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Bayesian Introduction</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="the-lady-tasting-tea.html"><a href="the-lady-tasting-tea.html"><i class="fa fa-check"></i><b>1</b> The Lady Tasting Tea</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="the-lady-tasting-tea.html"><a href="the-lady-tasting-tea.html#a-bayesian-version"><i class="fa fa-check"></i><b>1.1</b> A Bayesian Version</a></li>
+<li class="chapter" data-level="1.2" data-path="the-lady-tasting-tea.html"><a href="the-lady-tasting-tea.html#an-alcoholic-version"><i class="fa fa-check"></i><b>1.2</b> An Alcoholic Version</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="what-is-a-model.html"><a href="what-is-a-model.html"><i class="fa fa-check"></i><b>2</b> What is a Model?</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="what-is-a-model.html"><a href="what-is-a-model.html#models-make-predictions"><i class="fa fa-check"></i><b>2.1</b> Models Make Predictions</a></li>
+<li class="chapter" data-level="2.2" data-path="what-is-a-model.html"><a href="what-is-a-model.html#model-comparison-section"><i class="fa fa-check"></i><b>2.2</b> Model Comparison</a></li>
+<li class="chapter" data-level="2.3" data-path="what-is-a-model.html"><a href="what-is-a-model.html#more-models-section"><i class="fa fa-check"></i><b>2.3</b> More Models</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="what-is-a-model.html"><a href="what-is-a-model.html#open-minded-model-section"><i class="fa fa-check"></i><b>2.3.1</b> The Open-Minded Model</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="what-is-a-model.html"><a href="what-is-a-model.html#more-model-comparison-section"><i class="fa fa-check"></i><b>2.4</b> More Model Comparisons</a></li>
+<li class="chapter" data-level="2.5" data-path="what-is-a-model.html"><a href="what-is-a-model.html#concluding-thoughts"><i class="fa fa-check"></i><b>2.5</b> Concluding Thoughts</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="model-estimation-section.html"><a href="model-estimation-section.html"><i class="fa fa-check"></i><b>3</b> How do Models Estimate?</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="model-estimation-section.html"><a href="model-estimation-section.html#models-have-beliefs"><i class="fa fa-check"></i><b>3.1</b> Models Have Beliefs</a></li>
+<li class="chapter" data-level="3.2" data-path="model-estimation-section.html"><a href="model-estimation-section.html#updating-beliefs"><i class="fa fa-check"></i><b>3.2</b> Updating Beliefs</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="model-estimation-section.html"><a href="model-estimation-section.html#the-likelihood"><i class="fa fa-check"></i><b>3.2.1</b> The Likelihood</a></li>
+<li class="chapter" data-level="3.2.2" data-path="model-estimation-section.html"><a href="model-estimation-section.html#the-marginal-likelihood"><i class="fa fa-check"></i><b>3.2.2</b> The Marginal Likelihood</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="model-estimation-section.html"><a href="model-estimation-section.html#updated-beliefs"><i class="fa fa-check"></i><b>3.3</b> Updated Beliefs</a></li>
+<li class="chapter" data-level="3.4" data-path="model-estimation-section.html"><a href="model-estimation-section.html#more-models"><i class="fa fa-check"></i><b>3.4</b> More Models</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="model-estimation-section.html"><a href="model-estimation-section.html#sarahs-learning-process"><i class="fa fa-check"></i><b>3.4.1</b> Sarah’s Learning Process</a></li>
+<li class="chapter" data-level="3.4.2" data-path="model-estimation-section.html"><a href="model-estimation-section.html#davids-learning-process"><i class="fa fa-check"></i><b>3.4.2</b> David’s Learning Process</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="model-estimation-section.html"><a href="model-estimation-section.html#prior-distribution-in-bayesian-parameter-estimation"><i class="fa fa-check"></i><b>3.5</b> Prior Distribution in Bayesian Parameter Estimation</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="model-estimation-section.html"><a href="model-estimation-section.html#the-beta-distribution"><i class="fa fa-check"></i><b>3.5.1</b> The Beta Distribution</a></li>
+<li class="chapter" data-level="3.5.2" data-path="model-estimation-section.html"><a href="model-estimation-section.html#beta-interpretation-updating-section"><i class="fa fa-check"></i><b>3.5.2</b> Beta Interpretation</a></li>
+<li class="chapter" data-level="3.5.3" data-path="model-estimation-section.html"><a href="model-estimation-section.html#two-sided-vs-one-sided-estimation"><i class="fa fa-check"></i><b>3.5.3</b> Two-sided vs One-sided Estimation</a></li>
+<li class="chapter" data-level="3.5.4" data-path="model-estimation-section.html"><a href="model-estimation-section.html#an-endless-loop"><i class="fa fa-check"></i><b>3.5.4</b> An Endless Loop</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="model-estimation-section.html"><a href="model-estimation-section.html#relation-to-hypothesis-testing"><i class="fa fa-check"></i><b>3.6</b> Relation to Hypothesis Testing</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="model-estimation-section.html"><a href="model-estimation-section.html#the-savage-dickey-density-ratio"><i class="fa fa-check"></i><b>3.6.1</b> The Savage-Dickey Density Ratio</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="model-estimation-section.html"><a href="model-estimation-section.html#concluding-thoughts-1"><i class="fa fa-check"></i><b>3.7</b> Concluding Thoughts</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="the-beer-tasting.html"><a href="the-beer-tasting.html"><i class="fa fa-check"></i><b>4</b> The Beer Tasting</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="the-beer-tasting.html"><a href="the-beer-tasting.html#methods"><i class="fa fa-check"></i><b>4.1</b> Methods</a></li>
+<li class="chapter" data-level="4.2" data-path="the-beer-tasting.html"><a href="the-beer-tasting.html#analysis-in-jasp"><i class="fa fa-check"></i><b>4.2</b> Analysis in JASP</a></li>
+<li class="chapter" data-level="4.3" data-path="the-beer-tasting.html"><a href="the-beer-tasting.html#continuous-updating"><i class="fa fa-check"></i><b>4.3</b> Continuous Updating</a></li>
+<li class="chapter" data-level="4.4" data-path="the-beer-tasting.html"><a href="the-beer-tasting.html#concluding-thoughts-2"><i class="fa fa-check"></i><b>4.4</b> Concluding Thoughts</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html"><i class="fa fa-check"></i><b>5</b> More Bayesian Analyses</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#the-bayesian-t-test"><i class="fa fa-check"></i><b>5.1</b> The Bayesian T-Test</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#prior-distribution"><i class="fa fa-check"></i><b>5.1.1</b> Prior Distribution</a></li>
+<li class="chapter" data-level="5.1.2" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#predictive-updating-factor"><i class="fa fa-check"></i><b>5.1.2</b> Predictive Updating Factor</a></li>
+<li class="chapter" data-level="5.1.3" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#posterior-distribution-bayes-factor"><i class="fa fa-check"></i><b>5.1.3</b> Posterior Distribution &amp; Bayes Factor</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#the-bayesian-correlation"><i class="fa fa-check"></i><b>5.2</b> The Bayesian Correlation</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#prior-distribution-1"><i class="fa fa-check"></i><b>5.2.1</b> Prior Distribution</a></li>
+<li class="chapter" data-level="5.2.2" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#predictive-updating-factor-1"><i class="fa fa-check"></i><b>5.2.2</b> Predictive Updating Factor</a></li>
+<li class="chapter" data-level="5.2.3" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#posterior-distribution-bayes-factor-1"><i class="fa fa-check"></i><b>5.2.3</b> Posterior Distribution &amp; Bayes Factor</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#concluding-thoughts-3"><i class="fa fa-check"></i><b>5.3</b> Concluding Thoughts</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="exercises.html"><a href="exercises.html"><i class="fa fa-check"></i><b>6</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="exercises.html"><a href="exercises.html#binomial-test"><i class="fa fa-check"></i><b>6.1</b> Binomial Test</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="exercises.html"><a href="exercises.html#therapeutic-touch"><i class="fa fa-check"></i><b>6.1.1</b> Therapeutic Touch</a></li>
+<li class="chapter" data-level="6.1.2" data-path="exercises.html"><a href="exercises.html#psychologists-tasting-beer"><i class="fa fa-check"></i><b>6.1.2</b> Psychologists Tasting Beer</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="exercises.html"><a href="exercises.html#correlation"><i class="fa fa-check"></i><b>6.2</b> Correlation</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="exercises.html"><a href="exercises.html#correlation-a.w.e.s.o.m.-o-4000"><i class="fa fa-check"></i><b>6.2.1</b> Correlation: A.W.E.S.O.M.-O 4000</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="exercises.html"><a href="exercises.html#t-test"><i class="fa fa-check"></i><b>6.3</b> T-Test</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="exercises.html"><a href="exercises.html#the-effect-of-directed-reading-exercises"><i class="fa fa-check"></i><b>6.3.1</b> The Effect of Directed Reading Exercises</a></li>
+<li class="chapter" data-level="6.3.2" data-path="exercises.html"><a href="exercises.html#psychologists-tasting-beer-2-t-test-boogaloo"><i class="fa fa-check"></i><b>6.3.2</b> Psychologists Tasting Beer 2: T-Test Boogaloo</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="exercises.html"><a href="exercises.html#summary-stats"><i class="fa fa-check"></i><b>6.4</b> Summary Stats</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="exercises.html"><a href="exercises.html#t-test-flag-priming"><i class="fa fa-check"></i><b>6.4.1</b> T-Test: Flag Priming</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Brief Introduction to Bayesian Inference</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="the-beer-tasting" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">Chapter 4</span> The Beer Tasting<a href="the-beer-tasting.html#the-beer-tasting" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>With several key components of Bayesian inference explained, we can return to the beer tasting. Just as before, we have several models at our disposal that make certain claims about the proportion <span class="math inline">\(\theta\)</span>. In this case, <span class="math inline">\(\theta\)</span> is the population proportion of people that will give the correct response to which of the two beers contains alcohol. Again, a model can be extremely convinced of <span class="math inline">\(\theta\)</span> being equal to a single value, such as <span class="math inline">\(0.5\)</span>, which implies that people are simply guessing (i.e., the null hypothesis). Alternatively, a model can spread its prior beliefs by using the beta distribution. This beta distibution can then be two-sided (if the model wants to bet on all values between 0 and 1), or truncated to be one-sided (if the model only wants to bet on values greater <strong>or</strong> smaller than 0.5). These models can function as the alternative hypothesis. We will use these models for hypothesis testing, which is just another term for model comparison. In this chapter, we will analyze the beer tasting results from a Bayesian point of view, to get a practical understanding of the concepts introduced in the previous chapters.</p>
+<div id="methods" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Methods<a href="the-beer-tasting.html#methods" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>On a Friday afternoon, May 12th 2017, an informal beer tasting experiment took place at the Psychology Department of the University of Amsterdam. The experimental team consisted of three members: one to introduce the participants to the experiment and administer the test, one to pour the drinks, and one to process the data. Participants tasted two small cups filled with Weihenstephaner Hefeweissbier, one with alcohol and one without, and indicated which one contained alcohol. Participants were also asked to rate the confidence in their answer (measured on a scale from <span class="math inline">\(1\)</span> to <span class="math inline">\(100\)</span>, with <span class="math inline">\(1\)</span> being completely clueless and <span class="math inline">\(100\)</span> being absolutely sure), and to rate the two beers in tastiness (measured on a scale from <span class="math inline">\(1\)</span> to <span class="math inline">\(100\)</span>, with <span class="math inline">\(1\)</span> being the worst beer ever and <span class="math inline">\(100\)</span> being the best beer ever).
+The experiment was double-blind, such that the person administering the test and interacting with the participants did not know which of the two cups contained alcohol. For ease of reference, each cup was labeled with a random integer between <span class="math inline">\(1\)</span> and <span class="math inline">\(500\)</span>, and each integer corresponded either to the alcoholic or non-alcoholic beer. A coin was flipped to decide which beer was tasted first.
+The setup was piloted with <span class="math inline">\(9\)</span> participants; subsequently, we tested as many people as possible within an hour, and also recorded which of the two beers was tasted first. On average, testing took approximately 30 seconds per participant, yielding a total of <span class="math inline">\(57\)</span> participants. Of the 57 participants, 42 (<span class="math inline">\(73.7\%\)</span>) correctly identified the beer that contained alcohol: in other words, there were <span class="math inline">\(s = 42\)</span> successes and <span class="math inline">\(f = 15\)</span> failures.<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a></p>
+</div>
+<div id="analysis-in-jasp" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Analysis in JASP<a href="the-beer-tasting.html#analysis-in-jasp" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In order to analyze the collected data in JASP, the Bayesian binomial test can be used, which can be found under the menu labeled ``Frequencies”. Several settings are available for the binomial test, allowing exploration of different analysis choices. Figure <a href="the-beer-tasting.html#fig:jasp-screenshot-binomial-test">4.1</a> presents a screenshot of the options panel in JASP. For this analysis, we specify a test value of <span class="math inline">\(0.5\)</span> (i.e., chance performance), and <span class="math inline">\(a = b = 1\)</span> for the prior distribution of <span class="math inline">\(\theta\)</span> under <span class="math inline">\(\mathcal{H}_1\)</span>. Note that in a sensitivity or robustness analysis (covered in the next chapter), other values for <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> may be explored to assess their impact on the posterior distribution.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:jasp-screenshot-binomial-test"></span>
+<img src="Figures/binomTestJASPpanel2022.png" alt="Screenshot of the options for the Bayesian binomial test in JASP." width="100%" />
+<p class="caption">
+Figure 4.1: Screenshot of the options for the Bayesian binomial test in JASP.
+</p>
+</div>
+<p>The null hypothesis here postulates that participants perform at chance level, which implies <span class="math inline">\(\theta = 0.5\)</span> since if participants cannot taste the difference, they will just be guessing. The alternative hypothesis postulates that this is not the case. There are several options for the alternative hypothesis in terms of <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>, and its directionality. For instance, in the case of two-sided hypothesis testing, the hypotheses can be specified as follows:
+<span class="math display">\[\begin{equation*}
+\mathcal{H}_0:  \theta = 0.5
+\end{equation*}\]</span>
+<span class="math display">\[\begin{equation}
+\mathcal{H}_1:  \theta \sim \text{beta}(1, 1)\text{.}
+\label{eq:hypoSetupTwoSided}
+\end{equation}\]</span>
+However, since we wish to test whether or not participants’ discriminating ability <em>exceeds</em> chance, we can specify the alternative hypothesis to allow only values of <span class="math inline">\(\theta\)</span> greater than <span class="math inline">\(0.5\)</span> (note the `<span class="math inline">\(+\)</span>’ in the subscript):
+<span class="math display">\[\begin{equation}
+\mathcal{H}_+:  \theta \sim \text{beta}(1, 1) \text{I}  (0.5, 1)\text{,}
+\label{eq:hypoSetup}
+\end{equation}\]</span>
+where I indicates truncation of the beta distribution to the interval <span class="math inline">\([0.5, 1]\)</span>.</p>
+<p>Figure <a href="the-beer-tasting.html#fig:jasp-beer-result">4.2</a> illustrates the results of the binomial test. The left panel shows the prior and the posterior distribution of <span class="math inline">\(\theta\)</span> for the <strong>two-sided alternative hypothesis</strong>, along with the median and credible interval of the posterior distribution. The posterior median equals <span class="math inline">\(0.731\)</span> and the <span class="math inline">\(95\%\)</span> credible interval ranges from <span class="math inline">\(0.610\)</span> to <span class="math inline">\(0.833\)</span>, indicating a substantial deviation of <span class="math inline">\(\theta\)</span> from <span class="math inline">\(0.5\)</span>. For each value of <span class="math inline">\(\theta\)</span>, the change from prior distribution to posterior distribution is quantified by predictive adequacy: for those values of <span class="math inline">\(\theta\)</span> that predict the data better than average, the posterior density exceeds the prior density. Additionally, the two-sided Bayes factor <span class="math inline">\(\text{BF}_{10} = 112\)</span>, which means the data are 112 times more likely under <span class="math inline">\(\mathcal{H}_1\)</span> than under <span class="math inline">\(\mathcal{H}_0\)</span>.</p>
+<p>The right panel shows inference for the <strong>one-sided positive hypothesis</strong> (i.e., <span class="math inline">\(\mathcal{H}_+: \theta \geq 0.5\)</span>) compared to the null hypothesis: the resulting Bayes factor is <span class="math inline">\(225.26\)</span> in favor of the alternative hypothesis, which means the data are <span class="math inline">\(225\)</span> times more likely under <span class="math inline">\(\mathcal{H}_+\)</span> than under <span class="math inline">\(\mathcal{H}_0\)</span>.
+Note that the posterior distribution itself has hardly changed, compared to the two-sided result: the posterior median still equals <span class="math inline">\(0.731\)</span> and the <span class="math inline">\(95\%\)</span> credible interval ranges from <span class="math inline">\(0.610\)</span> to <span class="math inline">\(0.833\)</span>.
+Because virtually all posterior mass was already to the right of <span class="math inline">\(0.5\)</span> in the two-sided case, the posterior distribution was virtually unaffected by changing from <span class="math inline">\(\mathcal{H}_1\)</span> to <span class="math inline">\(\mathcal{H}_+\)</span>.
+However, in the right panel, <span class="math inline">\(\mathcal{H}_+\)</span> only predicts values greater than <span class="math inline">\(0.5\)</span>, which is reflected in the prior distribution: all prior mass is now located in the interval <span class="math inline">\((0.5\text{, } 1)\)</span>, and as a result, the prior mass in the interval <span class="math inline">\((0.5\text{, } 1)\)</span> has doubled. If the posterior remains constant, but the prior mass doubles, this means that the Bayes factor also doubles (perhaps best illustrated by the Savage-Dickey density ratio).
+In other words, a model that is predicting the data well and is focusing more on those values (e.g., <span class="math inline">\(\mathcal{H}_+\)</span>) has more evidence in its favor than a model that is predicting the data well, but spread its bets more (e.g., <span class="math inline">\(\mathcal{H}_1\)</span>). Such a built in reward for making a more specific prediction is an important mechanism in Bayesian model comparison, and is known as <strong>parsimony</strong>. Making a more specific prediction comes with a risk though: <span class="math inline">\(\mathcal{H}_-\)</span> predicted the data a lot worse than <span class="math inline">\(\mathcal{H}_0\)</span> because it bet on the wrong direction.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:jasp-beer-result"></span>
+<img src="Figures/beerTasteResultsPriorPostOneTwoSided.png" alt="Bayesian binomial test for theta. The probability wheel at the top illustrates the ratio of the evidence in favor of the two hypotheses. The two gray dots indicate the Savage-Dickey density ratio. The median and the 95 percent credible interval of the posterior distribution are shown in the top right corner. The left panel shows the two-sided test and the right panel shows the one-sided test." width="95%" />
+<p class="caption">
+Figure 4.2: Bayesian binomial test for theta. The probability wheel at the top illustrates the ratio of the evidence in favor of the two hypotheses. The two gray dots indicate the Savage-Dickey density ratio. The median and the 95 percent credible interval of the posterior distribution are shown in the top right corner. The left panel shows the two-sided test and the right panel shows the one-sided test.
+</p>
+</div>
+</div>
+<div id="continuous-updating" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Continuous Updating<a href="the-beer-tasting.html#continuous-updating" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The beer tasting experiment also highlights one of the main strengths of Bayesian inference: real-time monitoring of the incoming data. As the data accumulate, the analysis can be continuously updated to include the latest results. In other words, the results may be updated after every participant, or analyzed all at one, without affecting the resulting inference. To illustrate this, we can compute the posterior distribution for the first <span class="math inline">\(9\)</span> participants of the experiment for which <span class="math inline">\(s = 6\)</span> and <span class="math inline">\(f = 3\)</span>. Specifying the same beta prior distribution as before, namely a truncated beta distribution with shape parameters <span class="math inline">\(a = b = 1\)</span>, and combining this with the data, yields a truncated beta posterior distribution with shape parameters <span class="math inline">\(a = 6 + 1 = 7\)</span> and <span class="math inline">\(b = 3 + 1 = 4\)</span> (see also Section <a href="model-estimation-section.html#beta-interpretation-updating-section">3.5.2</a>). The resulting posterior distribution is presented in the left panel of Figure <a href="the-beer-tasting.html#fig:jasp-beer-result-updating">4.3</a>. Now, we can take the remaining 48 participants and update our knowledge once more. Because we already have knowledge about the population’s rate parameter <span class="math inline">\(\theta\)</span>, namely the results of the first 9 participants, we can incorporate this in the analysis through the prior distribution, following Lindley’s maxim “today’s posterior is tomorrow’s prior” <span class="citation">(<a href="#ref-Lindley1972" role="doc-biblioref">Lindley 1972</a>)</span>.</p>
+<p>In this case, we start with a truncated beta prior distribution with <span class="math inline">\(a = 7\)</span> and <span class="math inline">\(b = 4\)</span>, and update this with the data of the remaining 48 participants. Out of the 48 participants, 36 were correct, and 12 were incorrect. Updating the prior distribution with this data yields a posterior distribution with shape parameters <span class="math inline">\(a = 7 + 36 = 43\)</span> and <span class="math inline">\(b = 4 + 12 = 16\)</span>, which is exactly the same posterior distribution obtained when analyzing the full data set at once. This two-step procedure is illustrated in Figure <a href="the-beer-tasting.html#fig:jasp-beer-result-updating">4.3</a>. The left panel shows the original prior distribution (i.e., the truncated beta distribution with <span class="math inline">\(a = 1, b = 1\)</span>) and the posterior distribution for the first <span class="math inline">\(9\)</span> participants. The right panel shows the inference for the remaining <span class="math inline">\(48\)</span> participants, while starting with the posterior-turned-prior distribution reflecting the knowledge about the first <span class="math inline">\(9\)</span> participants (a truncated beta distribution with <span class="math inline">\(a = 7, b = 4\)</span>).</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:jasp-beer-result-updating"></span>
+<img src="Figures/BeerUpdatingPosteriorPlot.png" alt="Sequential updating of the Bayesian binomial test. The left panel shows results from a one-sided Bayesian binomial test for the first $n = 9$ participants ($s = 6$, $f = 3$). The shape parameters of the truncated beta prior were set to $a = 1$ and $b = 1$. The right panel shows results from a one-sided binomial test for the remaining $48$ participants. Here, the specified prior is the posterior distribution from the left panel: a truncated beta distribution with $a+s = 7$ and $b+f = 4$.  The resulting posterior distribution is identical to the posterior distribution in Figure 4.2. In order to obtain the total Bayes factor in Figure 4.2 (i.e., 225), the component Bayes factors from the left and right panel can be multiplied: $1.01 * 223 = 225$." width="100%" />
+<p class="caption">
+Figure 4.3: Sequential updating of the Bayesian binomial test. The left panel shows results from a one-sided Bayesian binomial test for the first <span class="math inline">\(n = 9\)</span> participants (<span class="math inline">\(s = 6\)</span>, <span class="math inline">\(f = 3\)</span>). The shape parameters of the truncated beta prior were set to <span class="math inline">\(a = 1\)</span> and <span class="math inline">\(b = 1\)</span>. The right panel shows results from a one-sided binomial test for the remaining <span class="math inline">\(48\)</span> participants. Here, the specified prior is the posterior distribution from the left panel: a truncated beta distribution with <span class="math inline">\(a+s = 7\)</span> and <span class="math inline">\(b+f = 4\)</span>. The resulting posterior distribution is identical to the posterior distribution in Figure 4.2. In order to obtain the total Bayes factor in Figure 4.2 (i.e., 225), the component Bayes factors from the left and right panel can be multiplied: <span class="math inline">\(1.01 * 223 = 225\)</span>.
+</p>
+</div>
+<p>We can even look at the evolution of the Bayes factor, as the data come in. This development can be inspected by means of a <strong>sequential analysis</strong>. Figure <a href="the-beer-tasting.html#fig:jasp-beer-result-updating">4.3</a> shows the evolution of the Bayes factor as more data are collected. Initially the evidence is inconclusive, but after about <span class="math inline">\(30\)</span> participants the evidence increasingly supports <span class="math inline">\(\mathcal{H}_1\)</span>. Being able to monitor the data as such can be very useful while planning or conducting an experiment. For instance, instead of needing to already commit to a certain sample size, a researcher can simply keep going untill a certain evidence threshold (for either hypothesis) is reached.<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a></p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:jasp-beer-result-sequential-analysis"></span>
+<img src="Figures/BeerSequentialAnalysis.png" alt="Sequential analysis, showing the evolution of the Bayes factor as $n$, the number of observed participants, increases. After an initial period of relative inconclusiveness, the Bayes factor strongly favors $H_+$." width="100%" />
+<p class="caption">
+Figure 4.4: Sequential analysis, showing the evolution of the Bayes factor as <span class="math inline">\(n\)</span>, the number of observed participants, increases. After an initial period of relative inconclusiveness, the Bayes factor strongly favors <span class="math inline">\(H_+\)</span>.
+</p>
+</div>
+</div>
+<div id="concluding-thoughts-2" class="section level2 hasAnchor" number="4.4">
+<h2><span class="header-section-number">4.4</span> Concluding Thoughts<a href="the-beer-tasting.html#concluding-thoughts-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In this chapter we compared several models that made a statement about the beer tasting ability of people. The null model was absolutely sure that people cannot taste the difference between alcoholic and non-alcoholic beer, while the positive alternative model (<span class="math inline">\(\mathcal{H}_+\)</span>) stated that people’s ability ranges uniformly from 0.5 to 1. The Bayes factor comparing the predictions of <span class="math inline">\(\mathcal{H}_+\)</span> and <span class="math inline">\(\mathcal{H}_0\)</span> indicated the observed proportion, <span class="math inline">\(0.73\)</span> (<span class="math inline">\(n = 57\)</span>), to be 225 times more likely under <span class="math inline">\(\mathcal{H}_+\)</span> than under <span class="math inline">\(\mathcal{H}_0\)</span>. This can be seen as very strong evidence (see Figure <a href="what-is-a-model.html#fig:bayes-factor-classification">2.3</a>) in favor of the theory that people can taste the difference between the two beers. In addition, Bayesian knowledge updating was illustrated by analyzing the data sequentially, as opposed to all at once.</p>
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Lindley1972" class="csl-entry">
+Lindley, D. V. 1972. <em><span>B</span>ayesian Statistics, a Review</em>. Philadelphia (PA): SIAM.
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="11">
+<li id="fn11"><p>Three video recordings of the procedure are available at <a href="https://osf.io/428pb/" class="uri">https://osf.io/428pb/</a><a href="the-beer-tasting.html#fnref11" class="footnote-back">↩︎</a></p></li>
+<li id="fn12"><p>This is in contrast to using <span class="math inline">\(p\)</span>-values, where the data can only be analyzed once, and any additional look at the data will inflate the type I error rate. <a href="the-beer-tasting.html#fnref12" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="model-estimation-section.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="more-bayesian-analyses.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/04-beer.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
