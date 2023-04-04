@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 How do Models Estimate? | A Brief Introduction to Bayesian Inference</title>
+  <meta name="description" content="A brief introduction to Bayesian concepts, based on a beer-tasting experiment." />
+  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 How do Models Estimate? | A Brief Introduction to Bayesian Inference" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="A brief introduction to Bayesian concepts, based on a beer-tasting experiment." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 How do Models Estimate? | A Brief Introduction to Bayesian Inference" />
+  
+  <meta name="twitter:description" content="A brief introduction to Bayesian concepts, based on a beer-tasting experiment." />
+  
+
+<meta name="author" content="Johnny van Doorn" />
+
+
+<meta name="date" content="2023-04-04" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="what-is-a-model.html"/>
+<link rel="next" href="the-beer-tasting.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Bayesian Introduction</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="the-lady-tasting-tea.html"><a href="the-lady-tasting-tea.html"><i class="fa fa-check"></i><b>1</b> The Lady Tasting Tea</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="the-lady-tasting-tea.html"><a href="the-lady-tasting-tea.html#a-bayesian-version"><i class="fa fa-check"></i><b>1.1</b> A Bayesian Version</a></li>
+<li class="chapter" data-level="1.2" data-path="the-lady-tasting-tea.html"><a href="the-lady-tasting-tea.html#an-alcoholic-version"><i class="fa fa-check"></i><b>1.2</b> An Alcoholic Version</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="what-is-a-model.html"><a href="what-is-a-model.html"><i class="fa fa-check"></i><b>2</b> What is a Model?</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="what-is-a-model.html"><a href="what-is-a-model.html#models-make-predictions"><i class="fa fa-check"></i><b>2.1</b> Models Make Predictions</a></li>
+<li class="chapter" data-level="2.2" data-path="what-is-a-model.html"><a href="what-is-a-model.html#model-comparison-section"><i class="fa fa-check"></i><b>2.2</b> Model Comparison</a></li>
+<li class="chapter" data-level="2.3" data-path="what-is-a-model.html"><a href="what-is-a-model.html#more-models-section"><i class="fa fa-check"></i><b>2.3</b> More Models</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="what-is-a-model.html"><a href="what-is-a-model.html#open-minded-model-section"><i class="fa fa-check"></i><b>2.3.1</b> The Open-Minded Model</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="what-is-a-model.html"><a href="what-is-a-model.html#more-model-comparison-section"><i class="fa fa-check"></i><b>2.4</b> More Model Comparisons</a></li>
+<li class="chapter" data-level="2.5" data-path="what-is-a-model.html"><a href="what-is-a-model.html#concluding-thoughts"><i class="fa fa-check"></i><b>2.5</b> Concluding Thoughts</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="model-estimation-section.html"><a href="model-estimation-section.html"><i class="fa fa-check"></i><b>3</b> How do Models Estimate?</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="model-estimation-section.html"><a href="model-estimation-section.html#models-have-beliefs"><i class="fa fa-check"></i><b>3.1</b> Models Have Beliefs</a></li>
+<li class="chapter" data-level="3.2" data-path="model-estimation-section.html"><a href="model-estimation-section.html#updating-beliefs"><i class="fa fa-check"></i><b>3.2</b> Updating Beliefs</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="model-estimation-section.html"><a href="model-estimation-section.html#the-likelihood"><i class="fa fa-check"></i><b>3.2.1</b> The Likelihood</a></li>
+<li class="chapter" data-level="3.2.2" data-path="model-estimation-section.html"><a href="model-estimation-section.html#the-marginal-likelihood"><i class="fa fa-check"></i><b>3.2.2</b> The Marginal Likelihood</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="model-estimation-section.html"><a href="model-estimation-section.html#updated-beliefs"><i class="fa fa-check"></i><b>3.3</b> Updated Beliefs</a></li>
+<li class="chapter" data-level="3.4" data-path="model-estimation-section.html"><a href="model-estimation-section.html#more-models"><i class="fa fa-check"></i><b>3.4</b> More Models</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="model-estimation-section.html"><a href="model-estimation-section.html#sarahs-learning-process"><i class="fa fa-check"></i><b>3.4.1</b> Sarah’s Learning Process</a></li>
+<li class="chapter" data-level="3.4.2" data-path="model-estimation-section.html"><a href="model-estimation-section.html#davids-learning-process"><i class="fa fa-check"></i><b>3.4.2</b> David’s Learning Process</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="model-estimation-section.html"><a href="model-estimation-section.html#prior-distribution-in-bayesian-parameter-estimation"><i class="fa fa-check"></i><b>3.5</b> Prior Distribution in Bayesian Parameter Estimation</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="model-estimation-section.html"><a href="model-estimation-section.html#the-beta-distribution"><i class="fa fa-check"></i><b>3.5.1</b> The Beta Distribution</a></li>
+<li class="chapter" data-level="3.5.2" data-path="model-estimation-section.html"><a href="model-estimation-section.html#beta-interpretation-updating-section"><i class="fa fa-check"></i><b>3.5.2</b> Beta Interpretation</a></li>
+<li class="chapter" data-level="3.5.3" data-path="model-estimation-section.html"><a href="model-estimation-section.html#two-sided-vs-one-sided-estimation"><i class="fa fa-check"></i><b>3.5.3</b> Two-sided vs One-sided Estimation</a></li>
+<li class="chapter" data-level="3.5.4" data-path="model-estimation-section.html"><a href="model-estimation-section.html#an-endless-loop"><i class="fa fa-check"></i><b>3.5.4</b> An Endless Loop</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="model-estimation-section.html"><a href="model-estimation-section.html#relation-to-hypothesis-testing"><i class="fa fa-check"></i><b>3.6</b> Relation to Hypothesis Testing</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="model-estimation-section.html"><a href="model-estimation-section.html#the-savage-dickey-density-ratio"><i class="fa fa-check"></i><b>3.6.1</b> The Savage-Dickey Density Ratio</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="model-estimation-section.html"><a href="model-estimation-section.html#concluding-thoughts-1"><i class="fa fa-check"></i><b>3.7</b> Concluding Thoughts</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="the-beer-tasting.html"><a href="the-beer-tasting.html"><i class="fa fa-check"></i><b>4</b> The Beer Tasting</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="the-beer-tasting.html"><a href="the-beer-tasting.html#methods"><i class="fa fa-check"></i><b>4.1</b> Methods</a></li>
+<li class="chapter" data-level="4.2" data-path="the-beer-tasting.html"><a href="the-beer-tasting.html#analysis-in-jasp"><i class="fa fa-check"></i><b>4.2</b> Analysis in JASP</a></li>
+<li class="chapter" data-level="4.3" data-path="the-beer-tasting.html"><a href="the-beer-tasting.html#continuous-updating"><i class="fa fa-check"></i><b>4.3</b> Continuous Updating</a></li>
+<li class="chapter" data-level="4.4" data-path="the-beer-tasting.html"><a href="the-beer-tasting.html#concluding-thoughts-2"><i class="fa fa-check"></i><b>4.4</b> Concluding Thoughts</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html"><i class="fa fa-check"></i><b>5</b> More Bayesian Analyses</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#the-bayesian-t-test"><i class="fa fa-check"></i><b>5.1</b> The Bayesian T-Test</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#prior-distribution"><i class="fa fa-check"></i><b>5.1.1</b> Prior Distribution</a></li>
+<li class="chapter" data-level="5.1.2" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#predictive-updating-factor"><i class="fa fa-check"></i><b>5.1.2</b> Predictive Updating Factor</a></li>
+<li class="chapter" data-level="5.1.3" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#posterior-distribution-bayes-factor"><i class="fa fa-check"></i><b>5.1.3</b> Posterior Distribution &amp; Bayes Factor</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#the-bayesian-correlation"><i class="fa fa-check"></i><b>5.2</b> The Bayesian Correlation</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#prior-distribution-1"><i class="fa fa-check"></i><b>5.2.1</b> Prior Distribution</a></li>
+<li class="chapter" data-level="5.2.2" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#predictive-updating-factor-1"><i class="fa fa-check"></i><b>5.2.2</b> Predictive Updating Factor</a></li>
+<li class="chapter" data-level="5.2.3" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#posterior-distribution-bayes-factor-1"><i class="fa fa-check"></i><b>5.2.3</b> Posterior Distribution &amp; Bayes Factor</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="more-bayesian-analyses.html"><a href="more-bayesian-analyses.html#concluding-thoughts-3"><i class="fa fa-check"></i><b>5.3</b> Concluding Thoughts</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="exercises.html"><a href="exercises.html"><i class="fa fa-check"></i><b>6</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="exercises.html"><a href="exercises.html#binomial-test"><i class="fa fa-check"></i><b>6.1</b> Binomial Test</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="exercises.html"><a href="exercises.html#therapeutic-touch"><i class="fa fa-check"></i><b>6.1.1</b> Therapeutic Touch</a></li>
+<li class="chapter" data-level="6.1.2" data-path="exercises.html"><a href="exercises.html#psychologists-tasting-beer"><i class="fa fa-check"></i><b>6.1.2</b> Psychologists Tasting Beer</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="exercises.html"><a href="exercises.html#correlation"><i class="fa fa-check"></i><b>6.2</b> Correlation</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="exercises.html"><a href="exercises.html#correlation-a.w.e.s.o.m.-o-4000"><i class="fa fa-check"></i><b>6.2.1</b> Correlation: A.W.E.S.O.M.-O 4000</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="exercises.html"><a href="exercises.html#t-test"><i class="fa fa-check"></i><b>6.3</b> T-Test</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="exercises.html"><a href="exercises.html#the-effect-of-directed-reading-exercises"><i class="fa fa-check"></i><b>6.3.1</b> The Effect of Directed Reading Exercises</a></li>
+<li class="chapter" data-level="6.3.2" data-path="exercises.html"><a href="exercises.html#psychologists-tasting-beer-2-t-test-boogaloo"><i class="fa fa-check"></i><b>6.3.2</b> Psychologists Tasting Beer 2: T-Test Boogaloo</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="exercises.html"><a href="exercises.html#summary-stats"><i class="fa fa-check"></i><b>6.4</b> Summary Stats</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="exercises.html"><a href="exercises.html#t-test-flag-priming"><i class="fa fa-check"></i><b>6.4.1</b> T-Test: Flag Priming</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Brief Introduction to Bayesian Inference</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="model-estimation-section" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapter 3</span> How do Models Estimate?<a href="model-estimation-section.html#model-estimation-section" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>In the previous chapter, we saw that people/models can have different beliefs/hypotheses about a phenomenon. Sarah was quite certain that the true probability of the coin landing heads was <span class="math inline">\(0.5\)</span>, whereas David believed that the coin was biased towards heads, assigning more mass to higher values of <span class="math inline">\(\theta\)</span>. We saw how we can observe data to test which of the models predicted this data the best, using the Bayes factor. In this chapter, we will look at how individual models update their beliefs, as a result of observing the data. In doing so, this chapter will illustrate the core Bayesian concept of starting with <strong>prior</strong> knowledge/beliefs, updating this knowledge with observed data, to end up with <strong>posterior</strong> knowledge/beliefs about a parameter.</p>
+<p>The following formula reflects this process:
+<span class="math display">\[\begin{align}
+\label{eq:BinomialEstimation}
+\underbrace{ p(\theta \mid \text{data})}_{\substack{\text{Posterior beliefs}}} \,\,\, = \,\,\,
+\underbrace{ p(\theta)}_{\substack{\text{Prior beliefs} }}
+\,\,\,\, \times
+\overbrace{\underbrace{\frac{p( \text{data} \mid \theta)}{p( \text{data})}}}^{\substack{\text{Prediction for specific }\theta }}_{\substack{\text{Average prediction} \\\text{across all }  \theta&#39;s}}.
+\end{align}\]</span>
+We have prior beliefs, which are updated by an <strong>updating factor</strong>, to form posterior beliefs. The updating factor indicates for each possible value of <span class="math inline">\(\theta\)</span>, how well it predicted the observed data, relative to all other possible values of <span class="math inline">\(\theta\)</span>. If this is still sounding rather vague, don’t worry - in this section we will demonstrate how this updating factor operates. However, before we discuss the updating factor, we go back to the start, and discuss the concept of prior knowledge/beliefs.</p>
+<div id="models-have-beliefs" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Models Have Beliefs<a href="model-estimation-section.html#models-have-beliefs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Belief is a funny word and we tend to associate the word with things that have seemingly little to do with science or statistics. However, we have beliefs about anything in the world – they might be quite weak, but we still have <em>some</em> starting point for reasoning about some phenomenon. For instance, I know very little about the number of penguins in the world, but I do know there are more than 0, probably more than <span class="math inline">\(1{,}000\)</span>, and fewer than <span class="math inline">\(1{,}000{,}000{,}000\)</span> of them.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> I could characterize my very uninformed belief by means of a proability distribution, where the probabilty mass depicts how plausible I deem certain values. This is exactly the same as we did in the previous chapter by characterizing the different peoples’ beliefs about the fairness of a coin. In this case, even if we would know absolutely nothing about the coin in question, we still have <em>some</em> information about the parameter <span class="math inline">\(\theta\)</span>. For instance, we know that it will be between 0 and 1 because it is a probability. If we do not have any knowledge beyond this, we could reflect our prior belief about <span class="math inline">\(\theta\)</span> by means of a uniform distribution, just like Alex did. In fact, we will now illustrate belief updating by looking at how Alex updates their beliefs, as a result of observing 8 heads out of 10 flips.</p>
+</div>
+<div id="updating-beliefs" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Updating Beliefs<a href="model-estimation-section.html#updating-beliefs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+As you might recall from section <a href="what-is-a-model.html#open-minded-model-section">2.3.1</a>, Alex was keeping an open mind about the values <span class="math inline">\(\theta\)</span> - their <strong>prior distribution</strong><a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> was a uniform distribution across all values between 0 and 1.
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:uninformed-model-binomial-prediction-2"></span>
+<img src="_main_files/figure-html/uninformed-model-binomial-prediction-2-1.png" alt="The so-called &quot;uninformed model&quot;. Alex wants to keep an open mind about the values of theta and considers each value equally plausible. The uniform prior distribution below reflects this." width="90%" />
+<p class="caption">
+Figure 3.1: The so-called “uninformed model”. Alex wants to keep an open mind about the values of theta and considers each value equally plausible. The uniform prior distribution below reflects this.
+</p>
+</div>
+<p>Now that we have formalized the prior beliefs about a parameter in the form of a probability distribution, we can start updating those beliefs with observed data. The belief updating factor consists of two parts.
+<!-- \begin{align} -->
+<!-- \label{eq:BinomialEstimationOne} -->
+<!-- \underbrace{{p( \text{data} \mid \theta)}}_{\substack{\text{Prediction for specific }\theta }} -->
+<!--  \text{and} -->
+<!-- \underbrace{{p( \text{data} )}}_{\substack{\text{Average prediction across all }\theta }} -->
+<!-- \end{align} --></p>
+<div id="the-likelihood" class="section level3 hasAnchor" number="3.2.1">
+<h3><span class="header-section-number">3.2.1</span> The Likelihood<a href="model-estimation-section.html#the-likelihood" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+The first part of the updating factor, <span class="math inline">\(p( \text{data} \mid \theta)\)</span>, expresses the likelihood of the observed data for all of the values postulated by the model. Here, this means all values between 0 and 1. For instance, we look at the likelihood of the observed data, given a <span class="math inline">\(\theta\)</span> value of 0.1. Just as before, we can use the binomial formula for this:
+<span class="math display">\[\begin{align}
+\label{binomFormulaTwo}
+\frac{n!}{k! (n-k)!} \theta^k\left(1-\theta\right)^{n-k},
+\end{align}\]</span>
+which for <span class="math inline">\(n = 10\)</span>, <span class="math inline">\(k = 8\)</span>, and <span class="math inline">\(\theta = 0.1\)</span> gives 0. We can compute this value for all of the values between 0 and 1. If we do so, we can make the following graph that shows the likelihood of the data, for each value of <span class="math inline">\(\theta\)</span>:
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:likelihood-binomial-8-heads"></span>
+<img src="_main_files/figure-html/likelihood-binomial-8-heads-1.png" alt="The likelihood of observing 8 heads out of 10 flips, for all possible values of theta." width="90%" />
+<p class="caption">
+Figure 3.2: The likelihood of observing 8 heads out of 10 flips, for all possible values of theta.
+</p>
+</div>
+<p>As you can see, the likelihood is the greatest for <span class="math inline">\(\theta = 0.8\)</span>. This makes sense because the observed proportion is equal to <span class="math inline">\(0.8\)</span>. In short, this likelihood function depicts how well each possible value of <span class="math inline">\(\theta\)</span> predicted the observed data. In the previous section we saw two people who postulated only a single value for <span class="math inline">\(\theta\)</span>. The likelihoods of their models can also be read from the above graph: Sarah (<span class="math inline">\(P(\text{data} \mid \theta = 0.5) =\)</span> 0.0439) and Paul (<span class="math inline">\(P(\text{data} \mid \theta = 0.8) =\)</span> 0.302).</p>
+<p>It is important to note that the likelihood is <strong>not</strong> a probability distribution: its surface area does not sum to 1, and we therefore cannot use it to make probabilistic statements about the parameter (we can use the posterior distribution for this, at the end of this section).</p>
+</div>
+<div id="the-marginal-likelihood" class="section level3 hasAnchor" number="3.2.2">
+<h3><span class="header-section-number">3.2.2</span> The Marginal Likelihood<a href="model-estimation-section.html#the-marginal-likelihood" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Now we can take a look at the second part of the updating factor: <span class="math inline">\(p( \text{data})\)</span>. This part is known as the <strong>marginal likelihood</strong>. In contrast to the first part, the marginal likelihood is a single number. Namely, it is the average of all the likelihoods, where the likelihood of each value is weighted by the prior belief placed on that value by the model. This is the same procedure as in the previous chapter (see section <a href="what-is-a-model.html#more-models-section">2.3</a>). In fact, for all of the models, the marginal likelihood was indicated by the yellow bar: it is the likelihood of the observed data, weighted by each model’s specific beliefs.
+In the case of Alex’ model, the prior belief is equal across all values, so the marginal likelihood is “simply” the average likelihood.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a> In this case, the marginal likelihood is equal to 0.0909 - precisely the height of the yellow bar in Figure <a href="what-is-a-model.html#fig:uninformed-model-binomial-prediction">2.6</a>.</p>
+<p>We can use this average likelihood to see which possible values of <span class="math inline">\(\theta\)</span> predicted the data better than average, and which values predicted the data worse than average: since the likelihood reflects the predictive quality of each value, the marginal likelihood reflects the average quality across all values.
+In the following figure, you can again see the likelihood function from Figure <a href="model-estimation-section.html#fig:likelihood-binomial-8-heads">3.2</a>, but now with the marginal likelihood added:</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:likelihood-binomial-8-heads-marginal"></span>
+<img src="_main_files/figure-html/likelihood-binomial-8-heads-marginal-1.png" alt="The likelihood of observing 8 heads out of 10 flips, for all possible values of theta. The purple line is the marginal likelihood, to visualize which values predicted the observed data better than average." width="90%" />
+<p class="caption">
+Figure 3.3: The likelihood of observing 8 heads out of 10 flips, for all possible values of theta. The purple line is the marginal likelihood, to visualize which values predicted the observed data better than average.
+</p>
+</div>
+<p>By doing so, we have quite literally set the bar: values of <span class="math inline">\(\theta\)</span> where the likelihood is greater than the marginal likelihood (approximately values between <span class="math inline">\(0.55\)</span> and <span class="math inline">\(0.95\)</span>) predicted the data better than average. In other words, <span class="math inline">\(p( \text{data} \mid \theta) &gt; p( \text{data})\)</span>. This means that the updating factor (i.e., the ratio of the likelihood and marginal likelihood) will be greater than 1. This in turn means that the posterior belief for those values will be greater than the prior belief. As a result of observing the data, values between <span class="math inline">\(0.55\)</span> and <span class="math inline">\(0.95\)</span> have an increase in plausibility. The reverse holds for values whose likelihood is lower than the marginal likelihood: those values have suffered a decrease in plausibility as a result of the data.
+Perhaps another look at the Bayesian updating formula makes more sense now than it did at first:
+<span class="math display">\[\begin{align}
+\underbrace{ p(\theta \mid \text{data})}_{\substack{\text{Posterior beliefs}}} \,\,\, = \,\,\,
+\underbrace{ p(\theta)}_{\substack{\text{Prior beliefs} }}
+\,\,\,\, \times
+\overbrace{\underbrace{\frac{p( \text{data} \mid \theta)}{p( \text{data})}}}^{\substack{\text{Prediction for specific }\theta }}_{\substack{\text{Average prediction} \\\text{across all }  \theta&#39;s}}.
+\end{align}\]</span></p>
+We can visualize the aforementioned process. Again we look at the likelihood values, but now the values that see an increase/decrease in plausibilty are marked by the blue/vermillion arrows, respectively:
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:likelihood-binomial-8-heads-marginal-redgreen"></span>
+<img src="_main_files/figure-html/likelihood-binomial-8-heads-marginal-redgreen-1.png" alt="Values of theta that predicted the data better than average (marked in blue) will have a updating factor greater than 1, and receive a boost in plausibility as a result of the data. The reverse holds for values that predicted worse than average (marked in vermillion). " width="90%" />
+<p class="caption">
+Figure 3.4: Values of theta that predicted the data better than average (marked in blue) will have a updating factor greater than 1, and receive a boost in plausibility as a result of the data. The reverse holds for values that predicted worse than average (marked in vermillion).
+</p>
+</div>
+</div>
+</div>
+<div id="updated-beliefs" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Updated Beliefs<a href="model-estimation-section.html#updated-beliefs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+We started this section with the prior beliefs of Alex’ model, which we updated by looking at which values predicted the data well, in order to form posterior beliefs. Just as with prior beliefs, our posterior beliefs are in the form of a posterior distribution. The figure below shows both distributions, including the vertical lines from Figure <a href="model-estimation-section.html#fig:likelihood-binomial-8-heads-marginal-redgreen">3.4</a> to illustrate the boost/penalty in plausibility.
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:prior-posterior-binomial"></span>
+<img src="_main_files/figure-html/prior-posterior-binomial-1.png" alt="Prior and posterior distribution. " width="90%" />
+<p class="caption">
+Figure 3.5: Prior and posterior distribution.
+</p>
+</div>
+<p>We have now updated Alex’ prior knowledge to posterior knowledge! The posterior distribution enables us to make probabilistic statements about values of <span class="math inline">\(\theta\)</span> because it is a probability distribution.<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a> For instance, the median of this posterior distribution is <span class="math inline">\(0.764\)</span>, which means that under Alex’ model, there is a 50% probability that <span class="math inline">\(\theta\)</span> is greater than <span class="math inline">\(0.764\)</span>. Or, we can use the posterior distribution to make an <em>interval estimation</em>. In the Bayesian framework, this is known as the <strong>credible interval</strong>. This interval entails taking the middle <span class="math inline">\(x\)</span>% of the posterior distribution. For instance, we can take a 95% credible interval, which ranges from <span class="math inline">\(0.482\)</span> to <span class="math inline">\(0.940\)</span> in this case. This means that under Alex’ model, there is a 95% probability that the true value of <span class="math inline">\(\theta\)</span> is between <span class="math inline">\(0.482\)</span> and <span class="math inline">\(0.940\)</span>. Such a straightfoward interpretation is one of the strengths of the Bayesian framework, compared to the frequentist framework.</p>
+</div>
+<div id="more-models" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> More Models<a href="model-estimation-section.html#more-models" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Up until this point, we have only looked at Alex’ model: it had a specific starting point (i.e., prior belief), which was updated with the observed data to form an ending point. However, in the previous chapter we saw that there are all sorts of different models. Each of those models have different prior beliefs (as reflected by their prior distributions). Even though the Bayesian knowledge updating procedure is exactly the same for all models, having a different starting point means that they also have a different ending point. Specifically, for each model, their prior distribution is different, and their marginal likelihood is different (as indicated by the yellow bars in the Figures in the previous chapter).</p>
+<p>The models shown so far differ in their “learning ability”. Generally, the uninformed model is a great learner: because it has a relatively weak starting point, it lets the data speak for itself. This is reflected by the posterior distribution being highly similar to the likelihood.<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a> In order to illustrate the differences in the models, and how they learn, we can go over how Sarah’s model and David’s model learned from the data.</p>
+<div id="sarahs-learning-process" class="section level3 hasAnchor" number="3.4.1">
+<h3><span class="header-section-number">3.4.1</span> Sarah’s Learning Process<a href="model-estimation-section.html#sarahs-learning-process" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+While Alex was casting a very wide net, Sarah was doing the opposite. Rather than considering all values of <span class="math inline">\(\theta\)</span>, Sarah was absolutely sure that there was only one possible value of <span class="math inline">\(\theta\)</span>, namely <span class="math inline">\(0.5\)</span>.
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:sarah-model-binomial"></span>
+<img src="_main_files/figure-html/sarah-model-binomial-1.png" alt="Sarah's model for a coin toss. The arrow indicates that only a single value for theta is postulated." width="90%" />
+<p class="caption">
+Figure 3.6: Sarah’s model for a coin toss. The arrow indicates that only a single value for theta is postulated.
+</p>
+</div>
+<p>In other words, Sarah’s prior belief about <span class="math inline">\(\theta\)</span> was quite fanatical. The prior density of all values other than 0.5 is 0, and the prior density at 0.5 is infinitely high (since infinity cannot be conveniently shown in a figure, we use the arrow to indicate infinity). So what happens when someone is absolutely convinced that <span class="math inline">\(\theta = 0.5\)</span>, and then gets presented with data? Perhaps another look at the Bayesian updating formula can give some insight:
+<span class="math display">\[\begin{align}
+\underbrace{ p(\theta \mid \text{data})}_{\substack{\text{Posterior beliefs}}} \,\,\, = \,\,\,
+\underbrace{ p(\theta)}_{\substack{\text{Prior beliefs} }}
+\,\,\,\, \times
+\overbrace{\underbrace{\frac{p( \text{data} \mid \theta)}{p( \text{data})}}}^{\substack{\text{Prediction for specific }\theta }}_{\substack{\text{Average prediction} \\\text{across all }  \theta&#39;s}}.
+\end{align}\]</span></p>
+<p>Since Sarah’s prior density for any value that is not 0.5, is equal to 0, that means that the posterior density for those values will also be 0. Because of the multiplication by 0, the updating factor is therefore completely ignored. As for the pior density at the value 0.5 - it too gets mutliplied by the updating factor, but just as anything multiplied by 0 is 0, anything multiplied by infinity is infinity. In other words, a model like Sarah’s is completely blind to the data, since she is alread so convinced that <span class="math inline">\(\theta = 0.5\)</span>.<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a> The posterior will therefore be exactly the same as in Figure <a href="model-estimation-section.html#fig:sarah-model-binomial">3.6</a> above.</p>
+<p>Let’s define the marginal likelihood once more: Sarah has prior beliefs about <span class="math inline">\(\theta\)</span>, reflected by the prior mass in Figure <a href="model-estimation-section.html#fig:sarah-model-binomial">3.6</a>. Each of these values has a certain match with the observed data (i.e., the likelihood). The marginal likelihood is then the average of all those likelihoods, weighted by the prior mass assigned. This weighting by prior mass makes each model’s marginal likelihood different from each other, because each has their own unique prior beliefs.
+If we were to look at the updating factor for Sarah, we would see that Sarah’s marginal likelihood is simply equal to the likelihood of the data for <span class="math inline">\(\theta = 0.5\)</span> (i.e, <span class="math inline">\(P(\text{data} \mid \theta = 0.5) =\)</span> 0.0439) because that is the only value that Sarah assigned any prior mass to.</p>
+</div>
+<div id="davids-learning-process" class="section level3 hasAnchor" number="3.4.2">
+<h3><span class="header-section-number">3.4.2</span> David’s Learning Process<a href="model-estimation-section.html#davids-learning-process" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Somewhere in the middle of Alex’ ambivalence and Sarah’s fanaticism, there is David’s prior belief that only values between 0.5 and 1 are possible, and that values closer to 1 are more plausible than values closer to 0.5. As you can see in Figure <a href="model-estimation-section.html#fig:david-model-binomial">3.7</a> below, this means that values between 0 and 0.5 are assigned 0 prior density - a process known as <strong>truncation</strong>. Truncation makes a model <strong>one-sided</strong>, since only values to one side of 0.5 have been assigned prior density, while the other side is set to 0. From Sarah’s learning process we saw that this means that David’s <em>posterior</em> beliefs will also be 0 for values below 0.5. So what does David’s learning process look like?</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:david-model-binomial"></span>
+<img src="_main_files/figure-html/david-model-binomial-1.png" alt="David's model for a coin toss. David believes that only values between 0.5 and 1 are possible, and that values closer to 1 are more plausible, a priori. When certain ranges of values have their density set to 0, we refer to the distribution as a *truncated distribution*." width="90%" />
+<p class="caption">
+Figure 3.7: David’s model for a coin toss. David believes that only values between 0.5 and 1 are possible, and that values closer to 1 are more plausible, a priori. When certain ranges of values have their density set to 0, we refer to the distribution as a <em>truncated distribution</em>.
+</p>
+</div>
+<p>Just as before, we start with the prior beliefs, update these with the updating factor (which values in the model predicted the data better/worse than average?), to form posterior beliefs. The difference between the different models lies in their different starting points (prior beliefs), but also their updating factor differs. Specifically, the likelihood stays the same (Figure <a href="model-estimation-section.html#fig:likelihood-binomial-8-heads">3.2</a>), but the marginal likelihood differs. As we see in Figure <a href="what-is-a-model.html#fig:two-models-binomial-onesided-predictions">2.5</a>, David’s marginal likelihood for the outcome of 8 heads is approximately 0.175.</p>
+<p>In the previous chapter we saw how we can use the ratio of the marginal likelihoods of two models (i.e., the Bayes factor) to do model comparison. In this chapter we focus on individual models and how they estimate/learn about the parameter. In that context we use the marginal likelihood to see which parameter values in the model predicted the data better/worse than average, in order to see which values receive a boost/penalty in plausibility. The figure below illustrates this mechanism - note that the likelihood is exactly the same as for other models, but the marginal likelihood (indicated by the purple bar) is different.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:likelihood-binomial-8-heads-marginal-david"></span>
+<img src="_main_files/figure-html/likelihood-binomial-8-heads-marginal-david-1.png" alt="The likelihood of observing 8 heads out of 10 flips, for all possible values of theta. The purple line is the marginal likelihood of David's model, to visualize which values predicted the observed data better than average." width="90%" />
+<p class="caption">
+Figure 3.8: The likelihood of observing 8 heads out of 10 flips, for all possible values of theta. The purple line is the marginal likelihood of David’s model, to visualize which values predicted the observed data better than average.
+</p>
+</div>
+<p>When we apply the Bayesian knowledge updating, we arrive at David’s posterior knowledge. As before, the values that predicted better than average will have a higher posterior density than prior density, while the reverse holds for values of <span class="math inline">\(\theta\)</span> that predicted the data worse than average. Note that David excluded some values of <span class="math inline">\(\theta\)</span> a priori (similar to Sarah), namely those values between 0 and <span class="math inline">\(0.5\)</span>. Since the prior density for those values is 0, the posterior density will also be 0, regardless of the observed data. For David’s posterior distribution, the median equals <span class="math inline">\(0.801\)</span>, and the 95% credible interval ranges from <span class="math inline">\(0.568\)</span> to <span class="math inline">\(0.95\)</span>. Although this is fairly similar to Alex’ posterior statistics (median <span class="math inline">\(=0.764\)</span>, 95% CI = <span class="math inline">\([0.482, 0.940]\)</span>), they are not identical because both started with different prior beliefs and so will have different posterior beliefs. The interpretation of the median and CI will be the same, but now conditional on David’s model: under David’s model, there is a 95% probability that <span class="math inline">\(\theta\)</span> is between 0.568 and 0.95.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:prior-posterior-binomial-david"></span>
+<img src="_main_files/figure-html/prior-posterior-binomial-david-1.png" alt="Prior and posterior distribution for David. Values that predicted the data better than average have received a boost in plausibility (i.e., posterior density &gt; prior density), whie the reverse holds for values that predicted the data poorly." width="90%" />
+<p class="caption">
+Figure 3.9: Prior and posterior distribution for David. Values that predicted the data better than average have received a boost in plausibility (i.e., posterior density &gt; prior density), whie the reverse holds for values that predicted the data poorly.
+</p>
+</div>
+</div>
+</div>
+<div id="prior-distribution-in-bayesian-parameter-estimation" class="section level2 hasAnchor" number="3.5">
+<h2><span class="header-section-number">3.5</span> Prior Distribution in Bayesian Parameter Estimation<a href="model-estimation-section.html#prior-distribution-in-bayesian-parameter-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We have now seen three different posterior distributions, for the three people (and their different prior beliefs) under consideration so far. As we have seen, the posterior distribution of Sarah is identical to her prior distribution, since she was so convinced about <span class="math inline">\(\theta = 0.5\)</span>. The posterior distributions for David and Alex are pretty similar, although not identical. This reflects a general mechanism in Bayesian parameter estimation: the more uninformed a prior distribution is, the more it lets “the data speak for itself”. In other words, the more peaked (i.e., informed) a prior distribution is, the more data are needed to “overthrow” such a strong prior conviction.
+In Bayesian inference for a proportion, this mechanism is neatly reflected by how the prior and posterior distribution, as well as the data, are built up. To illustrate, we can take a closer look at how we usually specify a prior distribution for a proportion.</p>
+<div id="the-beta-distribution" class="section level3 hasAnchor" number="3.5.1">
+<h3><span class="header-section-number">3.5.1</span> The Beta Distribution<a href="model-estimation-section.html#the-beta-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In Bayesian inference, the prior distribution can be any probability distribution (depending on which models you want to compare, or which model is most suitable for estimation). One requirement for the prior distribution is that it matches the domain of the parameter. In the case of a proportion, this means that the prior distribution ranges from 0 to 1. One such family of distributions is the <a href="https://en.wikipedia.org/wiki/Beta_distribution"><strong>beta distribution</strong></a>. The beta distribution can take on many different shapes, based on the value of its two shape parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> (sometimes also just written in Latin, <em>a</em> and <em>b</em>). Setting these shape parameters changes how the beta distribution looks. You can play around in <a href="https://researchmethodsuva.shinyapps.io/BayesTestMini/">this applet</a> or <a href="https://homepage.divms.uiowa.edu/~mbognar/applets/beta.html">this applet</a>, to get an idea.</p>
+<!-- ``` {r, echo = FALSE} -->
+<!-- knitr::include_app("") -->
+<!-- ``` -->
+<p>Basically, these are the dynamics:</p>
+<ul>
+<li>Setting <span class="math inline">\(a = b\)</span> creates a symetric distribution, with <span class="math inline">\(a = b = 1\)</span> giving a uniform distribution.
+<ul>
+<li>As the value of <span class="math inline">\(a = b\)</span> increases, more and more probability mass will be centered in the middle (at 0.5), with Sarah’s prior distribution as the limit (<span class="math inline">\(a = b = \infty\)</span>).</li>
+</ul></li>
+<li>When <span class="math inline">\(a &gt; b\)</span>, more probability mass will be to the right of 0.5, while the reverse holds for <span class="math inline">\(a &lt; b\)</span>.</li>
+<li>When <span class="math inline">\(a &lt; 1\)</span> and <span class="math inline">\(b &lt; 1\)</span>, more mass will be towards the tails of the distribution (close to 0 and 1). Note that <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> need to be greater than 0.</li>
+</ul>
+</div>
+<div id="beta-interpretation-updating-section" class="section level3 hasAnchor" number="3.5.2">
+<h3><span class="header-section-number">3.5.2</span> Beta Interpretation<a href="model-estimation-section.html#beta-interpretation-updating-section" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In the context of a prior distribution for a proportion, the <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> can be interpreted as previously observed heads and tails. For instance, having a uniform prior distribution (like Alex) can be seen as having observed 1 heads and 1 tails already. David’s prior distribution is in fact a beta distribution with <span class="math inline">\(a = 3\)</span> and <span class="math inline">\(b = 1\)</span>, truncated for lower values (meaning values <span class="math inline">\(&lt; 0.5\)</span> receive 0 probability mass). This corresponds to David having already seen 3 heads and 1 tails. In order to obtain Sarah’s prior distribution, we would have a beta distribution with <span class="math inline">\(a = b = \infty\)</span>, which means that Sarah believes as if she has already seen incredibly many heads and tails.</p>
+<p>In addition to the prior distribution, the posterior distribution for <span class="math inline">\(\theta\)</span> is also a beta distribution. Specifically, it is a beta distribution where <span class="math inline">\(a\)</span> is equal to the <span class="math inline">\(a\)</span> of the prior distribution, plus the number of observed succeses/heads. The <span class="math inline">\(b\)</span> is equal to the <span class="math inline">\(b\)</span> of the prior distribution, plus the number of observed failures/tails. For instance, Alex’ posterior distribution (Figure <a href="model-estimation-section.html#fig:prior-posterior-binomial">3.5</a>) is a beta distribution with <span class="math inline">\(a = 1 + 8 = 9\)</span>, and <span class="math inline">\(b = 1 + 2 = 3\)</span>, while David’s posterior distribution (Figure <a href="model-estimation-section.html#fig:prior-posterior-binomial-david">3.9</a>) is a (trunctated) beta distribution with <span class="math inline">\(a = 3 + 8 = 11\)</span>, and <span class="math inline">\(b = 1 + 2 = 3\)</span>. Representing the knowledge updating in terms of the beta distribution also illustrates how Sarah’s prior and posterior distribution are the same: her posterior <span class="math inline">\(a\)</span> is equal to <span class="math inline">\(\infty + 8 = \infty\)</span>, and her posterior <span class="math inline">\(b\)</span> is equal to <span class="math inline">\(\infty + 2 = \infty\)</span>.</p>
+</div>
+<div id="two-sided-vs-one-sided-estimation" class="section level3 hasAnchor" number="3.5.3">
+<h3><span class="header-section-number">3.5.3</span> Two-sided vs One-sided Estimation<a href="model-estimation-section.html#two-sided-vs-one-sided-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Typically, when applying Bayesian estimation, we use the most uninformed model, since this model has the least bias in it. In addition, a two-sided model is generally used because the one-sided model can give misleading estimates in case it predicts the wrong side. For instance, if the true value of <span class="math inline">\(\theta\)</span> equals 0.2, David will never assign any posterior mass to it, no matter the evidence. If we imagine observing 10 tails and 1 heads, David’s posterior distribution will look as follows:</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:prior-posterior-binomial-david-alt"></span>
+<img src="_main_files/figure-html/prior-posterior-binomial-david-alt-1.png" alt="Prior and posterior distribution for David, now with 10 tails and 1 heads. This illustrates how a one-sided model can give misleading estimates: the posterior median and credible interval here will still favor values greater than 0.5, even though the data give quite some evidence for lower values." width="90%" />
+<p class="caption">
+Figure 3.10: Prior and posterior distribution for David, now with 10 tails and 1 heads. This illustrates how a one-sided model can give misleading estimates: the posterior median and credible interval here will still favor values greater than 0.5, even though the data give quite some evidence for lower values.
+</p>
+</div>
+<p>While we can still take a 95% credible interval from this posterior, it is clear that it gives a misleading estimate (the 95% CI here will be from 0.5 to 0.65) . Since David’s model only considers values between 0.5 and 1, the values that receive a boost in plausibility are those values as close as possible to the observed proportion (<span class="math inline">\(1/11\)</span> = 0.091), so all posterior mass “piles up” at its truncation threshold. A two-sided model has a lot more flexibility and will simply follow along in the direction that the observed proportion is in (greater or smaller than 0.5).</p>
+</div>
+<div id="an-endless-loop" class="section level3 hasAnchor" number="3.5.4">
+<h3><span class="header-section-number">3.5.4</span> An Endless Loop<a href="model-estimation-section.html#an-endless-loop" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>What would happen if tomorrow we gather the same people again, and collect a new set of data? On this new day, they will have prior distributions equal to the posterior distributions of today, ready for a new round of knowledge updating. As more and more data accumulate (either spread over multiple days, or updated all at once), the starting prior distribution grows less influential. However, the stronger/informed the prior, the longer this process takes.</p>
+</div>
+</div>
+<div id="relation-to-hypothesis-testing" class="section level2 hasAnchor" number="3.6">
+<h2><span class="header-section-number">3.6</span> Relation to Hypothesis Testing<a href="model-estimation-section.html#relation-to-hypothesis-testing" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>So far we have been talking about models. In order to conduct a hypothesis test, we can take several of these models and compare their predictive performance through the Bayes factor (see section <a href="what-is-a-model.html#model-comparison-section">2.2</a> and section <a href="what-is-a-model.html#more-model-comparison-section">2.4</a>). Typically, the model with extreme conviction about a “null value”<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a>, which in this case would be Sarah’s model. Then, what we call the alternative hypothesis can be any other model that corresponds to the theory one wants to test: all models we have seen so far make some specific statement about plausible values of <span class="math inline">\(\theta\)</span>. The Bayes factor simply tells us which model predicted the data the best: it is a relative metric that compares two models at a time.</p>
+<div id="the-savage-dickey-density-ratio" class="section level3 hasAnchor" number="3.6.1">
+<h3><span class="header-section-number">3.6.1</span> The Savage-Dickey Density Ratio<a href="model-estimation-section.html#the-savage-dickey-density-ratio" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>When employing such a null/alternative hypothesis setup, there exists a convenient computational trick to obtain the Bayes factor of one alternative model over the null model. When we take the updating of the alternative model, for instance Alex’, we can take the prior density at the value of testing (<span class="math inline">\(0.5\)</span>) and the posterior density at the value of testing. The ratio of these two values is equal to the Bayes factor comparing Alex and Sarah’s models. The prior density at 0.5 equals 1 (i.e. <span class="math inline">\(P(\theta = 0.5) = 1\)</span>) and the posterior density at 0.5 equals approximately 0.5 (i.e., (<span class="math inline">\(P(\theta = 0.5 \mid \text{data}) \approx 0.5\)</span>)), so their ratio is approximately <span class="math inline">\(1 / 0.5 = 2\)</span>, in favor of the alternative hypothesis (i.e., <span class="math inline">\(\text{BF}_{10} \approx 2\)</span>). The Savage-Dickey density ratio also implies the following: when the prior density is higher than the posterior density at the value of testing, we will find evidence in favor of the alternative hypothesis (the magnitude of evidence depends on how much lower the prior density is). This makes sense: the value of testing is the only value that is considered by the null hypothesis, so if that value has suffered a <em>decline</em> in plausibility as a result of the data, then that means the null hypothesis as a whole did not do well. Figure <a href="model-estimation-section.html#fig:prior-posterior-binomial-sd-ratio">3.11</a> below shows Alex’ prior and posterior distribution, with the grey dots indicating the density ratio.</p>
+<p>For a different point of testing, for instance <span class="math inline">\(0.8\)</span>, we can take the Savage-Dickey density ratio at that point. With a test value of 0.8, the null model becomes equal to Paul’s model (his prior distribution was concentrated on the value 0.8), so we are comparing Alex’ model to Paul’s model. In Figure <a href="model-estimation-section.html#fig:prior-posterior-binomial-sd-ratio">3.11</a>, the density values are indicated by the purple dots. Here, the null model (i.e., Paul’s model) did very well, since <span class="math inline">\(0.8\)</span> fits the observed data very well, as indicated by the posterior density being much higher than the prior density at that point (<span class="math inline">\(\text{BF}_{01} \approx 3\)</span>).</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:prior-posterior-binomial-sd-ratio"></span>
+<img src="_main_files/figure-html/prior-posterior-binomial-sd-ratio-1.png" alt="Prior and posterior distribution for Alex, with the grey/purple dots indicating the prior/posterior density values for two test values: 0.5 and 0.8. The ratio of the grey values is equal to the Bayes factor comparing Alex' and Sarah's models, while the ratio of the purple values is equal to the Bayes factor comparing Alex' and Paul's models. This ratio is known as the Savage-Dickey density value." width="90%" />
+<p class="caption">
+Figure 3.11: Prior and posterior distribution for Alex, with the grey/purple dots indicating the prior/posterior density values for two test values: 0.5 and 0.8. The ratio of the grey values is equal to the Bayes factor comparing Alex’ and Sarah’s models, while the ratio of the purple values is equal to the Bayes factor comparing Alex’ and Paul’s models. This ratio is known as the Savage-Dickey density value.
+</p>
+</div>
+</div>
+</div>
+<div id="concluding-thoughts-1" class="section level2 hasAnchor" number="3.7">
+<h2><span class="header-section-number">3.7</span> Concluding Thoughts<a href="model-estimation-section.html#concluding-thoughts-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In this chapter, we have seen how different models learn from the same data to form posterior beliefs. These posterior beliefs about the parameter can then be used to make an estimation (i.e., a probabilistic statement) of the parameter in the form of a <span class="math inline">\(x\%\)</span> Credible Interval, or posterior median.</p>
+<p>We have seen several key ideas:</p>
+<ul>
+<li>Prior knowledge (i.e., what a model believes, <em>before</em> seeing the data) is characterized by a probability distribution: in the case of proportion <span class="math inline">\(\theta\)</span>, we typically use the beta distribution</li>
+<li>Prior knowledge is then updated with the updating factor, which consists of the likelihood of the observed data, and the average likelihood for that model</li>
+<li>Values of <span class="math inline">\(\theta\)</span> that predicted the data well will receive a boost in plausibilty (posterior density &gt; prior density) and values that predicted the data poorly will receive a penalty in plausibilty (prior density &gt; posterior density)</li>
+<li>The posterior distribution reflects our posterior knowledge (i.e., what a model believes, <em>after</em> seeing the data), which we use to make an estimate of the parameter</li>
+<li>Strong prior convictions will need more data to be overthrown.</li>
+</ul>
+
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="4">
+<li id="fn4"><p>How would you characterize your beliefs about the number of penguins in the world? What would your belief distribution look like?<a href="model-estimation-section.html#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>The prior distribution is the offical term for the probability distribution that quantifies a model’s prior beliefs about a parameter.<a href="model-estimation-section.html#fnref5" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p>Technical sidenote: <em>integrating</em> over the likelihood will give the marginal likelihood for Alex.<a href="model-estimation-section.html#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p>Note the contrast to the sampling distribution, which is a distribution of the sample statistic <span class="math inline">\(\hat{p}\)</span>, rather than the parameter.<a href="model-estimation-section.html#fnref7" class="footnote-back">↩︎</a></p></li>
+<li id="fn8"><p>Remember that the likelihood is not a probability distribution. You can see Bayesian statistics as a “trick” to turn the likelihood into a probability distribution (i.e., the posterior distribution), so that you can make probabilistic statements about the parameter!<a href="model-estimation-section.html#fnref8" class="footnote-back">↩︎</a></p></li>
+<li id="fn9"><p>I feel like there is a real-life analogue to be found here somewhere…<a href="model-estimation-section.html#fnref9" class="footnote-back">↩︎</a></p></li>
+<li id="fn10"><p>The null value is typically the value that implies no effect, such as 0.5 for a proportion, or 0 for a correlation or t-test.<a href="model-estimation-section.html#fnref10" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="what-is-a-model.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="the-beer-tasting.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/03-estimation.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
