@@ -3,17 +3,18 @@ title: "A Brief Introduction to Bayesian Inference"
 subtitle: "From Tea to Beer"
 author: "Johnny van Doorn"
 date: "`r Sys.Date()`"
-site: bookdown::bookdown_site
 documentclass: book
+site: bookdown::bookdown_site
 bibliography:
 - book.bib
 - packages.bib
 description: A brief introduction to Bayesian concepts, based on a beer-tasting experiment. 
-link-citations: yes
+link-citations: true
 urlcolor: blue
-github-repo: rstudio/bookdown-demo
 bookdown::pdf_book:
   latex_engine: pdflatex
+project: 
+  type: book
 output: 
   pdf_document:
     extra_dependencies: ["xfrac", "float"]
